@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Activos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main class="container">
+        <h1>Data Asset Manager</h1>
+
+        <!-- Formulario de registro -->
+        <section class="form-section">
+            <form class="form-group">
+                <label for="nombre">Nombre del activo</label>
+                <input type="text" id="nombre" placeholder="Nombre del activo">
+
+                <label for="categoria">Categoría</label>
+                <select id="categoria">
+                    <option value="Hardware">Hardware</option>
+                    <option value="Software">Software</option>
+                    <option value="Servicios">Servicios</option>
+                </select>
+
+                <label for="valor">Valor ($)</label>
+                <input type="number" id="valor" placeholder="Valor ($)">
+
+                <button type="button" id="btn-agregar">
+                    Registrar activo
+                </button>
+            </form>
+        </section>
+
+        <!-- Filtro -->
+        <section class="filter-group">
+            <label for="filtro-categoria">Filtrar por categoría:</label>
+            <select id="filtro-categoria">
+                <option value="">Todas</option>
+                <option value="Hardware">Hardware</option>
+                <option value="Software">Software</option>
+                <option value="Servicios">Servicios</option>
+            </select>
+        </section>
+
+        <!-- Resultados -->
+        <section class="results">
+            <div id="output">
+                <p class="empty">No hay activos registrados</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
