@@ -1,12 +1,40 @@
 body {
-    background-color:black
-
+    background-color: black;
 }
 
 h1 {
-    color:azure;
+    color: azure;
 }
 
 label {
     color: white;
+}
+
+p {
+    color: white;
+}
+
+#output {
+    color: white;
+}
+
+.card {
+    color: white;
+}
+
+.value {
+    color: red;
+    font-weight: bold;
+}
+
+.category.hardware {
+    color: deepskyblue;
+}
+
+.category.software {
+    color: limegreen;
+}
+
+.category.services {
+    color: orange;
 }
