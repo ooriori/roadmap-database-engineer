@@ -1,9 +1,13 @@
-# Roadmap a Senior Database Engineer 
+# Roadmap to Senior Database Engineer
 
-Este repositorio contiene mi progreso técnico, dividido por hitos de aprendizaje.
+This repository contains my technical progress, divided by learning milestones.
 
-| Fase | Nombre del Proyecto | Concepto Clave | Estado |
-| :--- | :--- | :--- | :--- |
-| 01 | Filtro de Nómina | Manipulación de Arrays y Objetos |  Completado |
-| 02 | Persistencia Local | JSON & LocalStorage |  En proceso |
-| 03 | Conexión API | Fetch & Asincronía | 📅 Pendiente |
+| Phase | Project Name | Key Concept | Status |
+
+:--- |:--- |:--- |:--- |
+
+01 | Payroll Filter | Array and Object Manipulation | 📅 Pending |
+
+02 | Local Persistence | JSON & LocalStorage | 📅 Pending |
+
+03 | API Connection | Fetch & Asynchronicity | 📅 Pending |
