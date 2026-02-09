@@ -1,46 +1,52 @@
-// Temporary in-memory database
-
-let assets = []
+// 1. INITIAL LOAD: Read database from disk or start empty
+// Usamos JSON.parse para convertir el texto del disco en objetos de JS
+let assets = JSON.parse(localStorage.getItem('db_assets')) || [];
 
 // DOM references
-
 const btnAdd = document.getElementById('btn-add');
-const filterCat = document.getElementById('filter-category')
-const output = document.getElementById('output')
+const filterCat = document.getElementById('filter-category');
+const output = document.getElementById('output');
 
-// Function to add data
-btnAdd.addEventListener('click', () =>
-    {
-        const name = document.getElementById('name').value;
-        const category = document.getElementById('category').value;
-        const value = Number(document.getElementById('value').value);
+// Initial render to show saved data
+render(assets);
 
-// Validation logic (Data integrity)
+// 2. SAVE FUNCTION: Keeps the disk updated
+function saveOnDisk() {
+    localStorage.setItem('db_assets', JSON.stringify(assets));
+}
 
-            if (name.trim() === "" || value <= 0) {
-                alert("Error: Please enter valid data for the asset");
-                return; 
-            }
+// 3. ADD DATA LOGIC
+btnAdd.addEventListener('click', () => {
+    const name = document.getElementById('name').value;
+    const category = document.getElementById('category').value;
+    const value = Number(document.getElementById('value').value);
 
-            
-            const newAsset = {
-    id: Date.now(), // generate a simple unique asset
-    name,
-    category,
-    value
+    // Data integrity validation
+    if (name.trim() === "" || value <= 0) {
+        alert("Error: Please enter valid data for the asset");
+        return; 
+    }
+
+    const newAsset = {
+        id: Date.now(), // Unique ID based on timestamp
+        name,
+        category,
+        value
     };
 
-            assets.push(newAsset);
-            console.log("Asset registered:", newAsset);
-            render(assets);
+    assets.push(newAsset);
+    saveOnDisk(); // <--- CRUCIAL: Persist data immediately
+    render(assets);
 
+    // Clean inputs for the user
+    document.getElementById('name').value = "";
+    document.getElementById('value').value = "";
 });
 
-// Filter logic (Simulating SQL Query)
-filterCat.addEventListener('change', (e) => 
-{
+// 4. FILTER LOGIC (Simulating SQL Query)
+filterCat.addEventListener('change', (e) => {
     const selection = e.target.value;
-    if (selection === "") {
+    if (selection === "" || selection === "All") {
         render(assets);
     } else {
         const filtered = assets.filter(a => a.category === selection);
@@ -48,14 +54,21 @@ filterCat.addEventListener('change', (e) =>
     }
 });
 
-// Function that calculates the Total sum of all assets 
-function calculateTotal(list) 
-{
-    const totalValue = list.reduce((acum, item) => acum + item.value, 0);
-    return totalValue;
+// 5. CALCULATION LOGIC (Data Aggregation)
+function calculateTotal(list) {
+    // Reduce: The "Swiss Army Knife" of Data Engineers
+    return list.reduce((acum, item) => acum + item.value, 0);
 }
 
-// Function to display in the DOM 
+// 6. DELETION LOGIC
+function deleteAsset(id) {
+    // Filter out the item with the matching ID
+    assets = assets.filter(item => item.id !== id);
+    saveOnDisk(); // Update storage after deletion
+    render(assets);
+}
+
+// 7. DISPLAY LOGIC (DOM Manipulation)
 function render(list) {
     output.innerHTML = "";
 
@@ -64,17 +77,16 @@ function render(list) {
         card.className = "card";
 
         card.innerHTML = `
-        <span class="id"><strong>ID:</strong> ${item.id}</span> |
-        <span class="name"><strong>Name:</strong> ${item.name}</span> |
-        <span class="category ${item.category.toLowerCase()}">
-        <strong>Category:</strong> ${item.category}
-        </span> |
-        <span class="value">
-        <span class="label-value">Value:</span>
-        <span class="number-value">$${item.value}</span>
-        </span>
+            <span class="id"><strong>ID:</strong> ${item.id}</span> |
+            <span class="name"><strong>Name:</strong> ${item.name}</span> |
+            <span class="category ${item.category.toLowerCase()}">
+                <strong>Cat:</strong> ${item.category}
+            </span> |
+            <span class="value">
+                <strong>Value:</strong> $${item.value}
+            </span>
+            <button class="btn-delete" onclick="deleteAsset(${item.id})">Delete</button>
         `;
-
         output.appendChild(card);
     });
 
@@ -82,33 +94,6 @@ function render(list) {
     const total = calculateTotal(list);
     const totalCard = document.createElement('div');
     totalCard.className = "total-card";
-    totalCard.innerHTML = `
-    <strong>Total Value:</strong> <span class="total-amount">$${total}</span>`;
-    
+    totalCard.innerHTML = `<strong>Total Portfolio Value:</strong> <span class="total-amount">$${total}</span>`;
     output.appendChild(totalCard);
-}
-//-----------------------------------------------------------------------------------------------
-
-// 1. INITIAL LOAD: Read what already exists when the website opens
-
-assets = JSON.parse(localStorage.getItem('db_assets')) || [];
-
-function saveOnDisk() {
-// 2. PERSISTENCE: Convert the array to text and send it to disk
-
-localStorage.setItem('db_assets', JSON.stringify(assets));
-
-}
-
-function deleteAsset(id) {
-// 3. DELETION LOGIC: Filter to exclude the ID we want to delete
-
-assets = assets.filter(item => item.id !== id);
-
-// 4. SYNCHRONIZATION: IF YOU DELETE FROM MEMORY, DELETE FROM DISK
-
-saveOnDisk();
-
-render(assets);
-
 }
