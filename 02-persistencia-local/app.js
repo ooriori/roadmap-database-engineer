@@ -87,3 +87,28 @@ function render(list) {
     
     output.appendChild(totalCard);
 }
+//-----------------------------------------------------------------------------------------------
+
+// 1. INITIAL LOAD: Read what already exists when the website opens
+
+assets = JSON.parse(localStorage.getItem('db_assets')) || [];
+
+function saveOnDisk() {
+// 2. PERSISTENCE: Convert the array to text and send it to disk
+
+localStorage.setItem('db_assets', JSON.stringify(assets));
+
+}
+
+function deleteAsset(id) {
+// 3. DELETION LOGIC: Filter to exclude the ID we want to delete
+
+assets = assets.filter(item => item.id !== id);
+
+// 4. SYNCHRONIZATION: IF YOU DELETE FROM MEMORY, DELETE FROM DISK
+
+saveOnDisk();
+
+render(assets);
+
+}
